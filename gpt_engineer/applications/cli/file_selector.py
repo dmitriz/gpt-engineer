@@ -30,6 +30,7 @@ from gpt_engineer.core.default.disk_memory import DiskMemory
 from gpt_engineer.core.default.paths import metadata_path
 from gpt_engineer.core.files_dict import FilesDict
 from gpt_engineer.core.git import filter_by_gitignore, is_git_repo
+from security import safe_command
 
 
 class FileSelector:
@@ -233,14 +234,14 @@ class FileSelector:
         # Try the preferred editor first, then fallback to common editors
         if chosen_editor:
             try:
-                subprocess.run([chosen_editor, file_path])
+                safe_command.run(subprocess.run, [chosen_editor, file_path])
                 return
             except Exception:
                 pass
 
         for editor in editors:
             try:
-                subprocess.run([editor, file_path])
+                safe_command.run(subprocess.run, [editor, file_path])
                 return
             except Exception:
                 continue
