@@ -62,6 +62,7 @@ from gpt_engineer.core.git import stage_uncommitted_to_git
 from gpt_engineer.core.preprompts_holder import PrepromptsHolder
 from gpt_engineer.core.prompt import Prompt
 from gpt_engineer.tools.custom_steps import clarified_gen, lite_gen, self_heal
+from security import safe_command
 
 app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]}
@@ -253,8 +254,7 @@ def get_system_info():
 
 def get_installed_packages():
     try:
-        result = subprocess.run(
-            [sys.executable, "-m", "pip", "list", "--format=json"],
+        result = safe_command.run(subprocess.run, [sys.executable, "-m", "pip", "list", "--format=json"],
             capture_output=True,
             text=True,
         )
